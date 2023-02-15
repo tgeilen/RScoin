@@ -43,12 +43,196 @@ Off-Chain (Python):
 
     Transctions (Monero 6)
 
+______________________________________________________________________________________________________________________
 
+0) SETUP
+    0.1) User generates keys (off-chain)
+        - key pair view kv/KV
+        - key pair sign ks/KV
+            - currently uses ethereum account logic
+            - probabaly needs to be changed to pure ECC so that Ring Signature works
 
-
+    0.2) Creation of cryptocurrency (on-chain)
+        - when the smart contract is deployed, the contract receives a set of on time addresses, which correspond to users,
+        and splits the minted amounted coins equally between the addresses
+        - one time addresses are stored in the smart contract
         
-        
-xxxxxxxxxxxxxxxx
+        - how do the addresses get the amount and blinding factor to prove ownership????
 
-TODO
-    - implement python elliptic curve functions (yay :-))
+
+1)  new user transaction (off-chain)
+
+    - proof ownership of open outputs (sender)
+        - find one-time address K0, pubKey rG and transaction index t of oO
+        - calculate r*KV = kv * rG
+        - calculate KS' =  K0 - Hash(r * KV, t)*G
+        if KS' = KS: (sender is owner of oO)
+            calculate k0 = Hash(r*KV, t) + ks
+    
+    - create new outputs (sender)
+
+        - find owned unused open accounts with a combined balance >= amount to be spend
+        //create another openOutput for unspend amount and send to yourself
+
+        - generate randum number r
+        - set transaction pubKey as rG
+        - set transaction index t = 0
+
+        for each output with amount b to reciever (RKV, RKS):
+
+            -check b > 0 locally in python script
+                //needed to avoid use / implementation of range proofs
+
+            - K0t = Hash(r * RKV, t) * G + RKS //calculate output adress 
+
+            - create random blind factor y
+            - set amount commitment ACt = y * G + b * H
+            - communicate y and b to reciever
+                //could be done using Deffie-Hellman, for now send locally off-chain within python logic 
+
+            - add openOutput to Blockchain:
+                // create ring Signature (off-chain)
+                // have ring signature checked (on-chain)
+                // on success:
+                    - add K0 to array of openOutputs
+                    - create openOutputStruct OOS for openOutput
+                    - add K0 and OOS to map (K0 ==> OOS)
+                    - emit newOpenOutput event
+
+    - create pseudo commitments (sender / off-chain):
+
+        - create list of the amount Commitments that are being spend  list(oAC)
+        - create list of the new amount Commitments  list(ACt)
+
+        for each oAC in list(oAC):
+    
+            - set a = amount of respetive openO utput
+            - set y = blinding factor of respective open output
+            
+            if not the last element:
+                - create random number x               
+            
+            else:
+                - set x = SUM(all y) - SUM(all other x) //SEE MONERO 5.4 SUM(ALL Y) - SUM(ALL X) = 0 
+
+            - set new pseudo amount commitment nAC = x * G + a * H
+                - set z = y - x     // oAC - nAC = z * G proof knowledge of 
+
+    
+    - create rings (sender / off-chain):
+        - m = number of used openOutputs
+        - v = number of ring members //can be chosen
+        - get m sets j of v other openOutputs with one-time address FK0(v,m) and FAC(v,m)
+        - set p = random number in [1,v+1]
+
+        for each input, j in [1,m]:
+            - create ring Rj = {
+                { FK0(1,j) , FAC(1,j) - nAC(p,j) },
+                ...                               ,
+                { K0(p,j) , AC(p,j) - nAC(p,j) },
+                ...                               ,
+                { FK0(v+1,j) , FAC(v+1,j) - nAC(p,j) }
+            }
+
+
+//AB HIER VORSICHT
+    - create MLSAG (sender / off-chain):
+        
+        - create list K'[m] for key images
+
+        - create list a[m] of alphas
+
+        - for each j [1,m]:
+            - K'[j] = k0(j) * Hash(FK(p,j))  //Hash must return point on EC
+            - a[j] = random number in mudolo
+
+        - create list r[v][m]
+
+        - for i in [1,v]:
+            if not i=p:
+                - for j in [1,m]:
+                    r[i][j] = random number in mudolo
+
+        - create list c[] 
+
+        - c[p+1] = Hash(message,
+                        a[1] * G ,
+                        a[1] * Hash(K0(p,1)) ,
+                        ...,
+                        a[m] * G,
+                        a[m] * Hash(K0(p,m))
+                        )
+
+        - for i in [p+1,n]+[1,p-1]:
+
+            - c[i+1] = Hash(message,
+                        r[i][1] * G + c[i] * FK0(i,1),
+                        r[i][1] * Hash(FK0(i,1)) + c[i] * K'[1],
+                        ...,
+                        r[i][m] * G + c[i] * FK0(i,m),
+                        r[i][m] * Hash(FK0(i,m)) + c[m] * K'[m],
+                        )
+
+        - for i in [1,m]:
+             - r[p][j] = a[j] - c[p] * k0(p,j) (mudolo)
+
+        - signature sig(message) = (c[1], r[1][1], ..., r[1][m], ..., r[n][1], ..., r[n][m]) 
+        - key imagaes (K'[1], ..., K'[m])
+//BIS HIER VORSICHT
+
+    for j in [1,m]:
+        - create MLSAG (sender / off-chain):
+            - set key image K'[j] =  k0(j) * Hash(FK(p,j))  //Hash must return point on EC
+
+            - set a1, a2 = random number in mudolo
+            
+            - create field r[v+1][2]
+            - for all i in [1,v+1]:
+                if not i == p:
+                    r[i][1] = random number in mudolo
+                    r[i][2] = random number in mudolo
+
+            - create list c[v+1]
+            - c[p+1] = Hash(message,
+                        a1 * G ,
+                        a1 * Hash(K0(p,1)) ,
+                        a2 * G,
+                        a2 * Hash(AC(p,j) - nAC(p,j))       // AC(p,j) - nAC(p,j) * G = z * G
+                        )
+
+            - for i in [p+1,n]+[1,p-1]:
+                - c[i+1] = Hash(message,
+                            r[i][1] * G + c[i] * FK0(i,1),
+                            r[i][1] * Hash(FK0(i,1)) + c[i] * K'[1],
+                            r[i][2] * G + c[i] * (FAC(1,j) - nAC(p,j)),
+                            r[i][2] * Hash(FAC(i,j) - nAC(p,j))) //hier auf jeden fall nochmal indexe überprüfen, key image entfernt weil nicht vorhanden (?)
+                            )
+
+            - set r[p][1] = a1 - c[p] * k0(p,1)
+            - set r[p][2] = a2 - c[p] * z[j]
+
+            - def signature sig(message) = (c[1],r[1][1], rr[1][2], ..., r[v+1][1], rr[v+1][2])
+
+
+
+
+
+
+
+
+    - creating the transaction (sender / off-chain)
+
+        - 
+
+
+
+
+
+
+
+
+Topics currently not included:
+    - Rangeproofs to check that amount is > 0
+    - Deffie-Hellman for information sharing (blinding factor, amount of commitment)
+    - Sub-addresses
+    - Transaction fees
