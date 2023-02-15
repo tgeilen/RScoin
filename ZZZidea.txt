@@ -1,0 +1,54 @@
+Smart Contract:
+
+    Variables:
+    - map with open outputs
+        - outputs have address and amount commitment
+            - adress needed to retrive (maybe only as key of map)
+            - aC made from blinding factor & amount -> ac = bf * G + a * have
+                - bf and a could be transfer using Diffie Hellman (see Monero 5.3)
+                - for now off-chain in python skript (local enviroment)
+
+    Functions:
+    - updateMap() -> None : removes old / used outputs and adds new ones
+
+    - verifyRingSignature -> Bool : checks if RingSignature is valid
+            
+
+Off-Chain (Python):
+
+
+    Setup: 
+        - Connect to Blockchain
+        - Create dummy accounts
+        - Deploy Smart Contract
+            - Assign inital outputs to dummy accounts
+
+    Account:
+        -stores list of open outputs (adress) with respective amount and bf
+
+    Amount Hiding (Monero 5.4):
+        - references to open outputs (from list in account) of Smart Contract
+            - knowing address "proofs" ownership
+                ###TODO: look at one-time-adress in Monero Guide
+        
+        - use of pseudo output commitments (?)
+            ###TODO have a closer look
+        
+        - look at Monero Code for blindign factors
+
+        - neglect Range Proofs for now 
+            - use of simple boolean checks (amount>0) in python logic
+
+    ------
+
+    Transctions (Monero 6)
+
+
+
+
+        
+        
+xxxxxxxxxxxxxxxx
+
+TODO
+    - implement python elliptic curve functions (yay :-))
