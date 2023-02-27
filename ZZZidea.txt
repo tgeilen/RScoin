@@ -78,16 +78,16 @@ ________________________________________________________________________________
         - set transaction pubKey as rG
         - set transaction index t = 0
 
-        for each output with amount b to reciever (RKV, RKS):
+        for each output with amount b to receiver (RKV, RKS):
 
             -check b > 0 locally in python script
                 //needed to avoid use / implementation of range proofs
 
-            - K0t = Hash(r * RKV, t) * G + RKS //calculate output adress 
+            - K0t = Hash(r * RKV, t) * G + RKS //calculate output address 
 
             - create random blind factor y
             - set amount commitment ACt = y * G + b * H
-            - communicate y and b to reciever
+            - communicate y and b to receiver
                 //could be done using Deffie-Hellman, for now send locally off-chain within python logic 
 
             - add openOutput to Blockchain:
@@ -106,7 +106,7 @@ ________________________________________________________________________________
 
         for each oAC in list(oAC):
     
-            - set a = amount of respetive openO utput
+            - set a = amount of respetive openOutput
             - set y = blinding factor of respective open output
             
             if not the last element:
@@ -122,7 +122,7 @@ ________________________________________________________________________________
     - create rings (sender / off-chain):
         - m = number of used openOutputs
         - v = number of ring members //can be chosen
-        - get m sets j of v other openOutputs with one-time address FK0(v,m) and FAC(v,m)
+        - get m sets j of v other openOutputs with one-time address FK0(v,m) and fake amount commitment FAC(v,m)
         - set p = random number in [1,v+1]
 
         for each input, j in [1,m]:
@@ -135,7 +135,7 @@ ________________________________________________________________________________
             }
 
 
-//AB HIER VORSICHT
+//SKIP
     - create MLSAG (sender / off-chain):
         
         - create list K'[m] for key images
@@ -178,7 +178,7 @@ ________________________________________________________________________________
 
         - signature sig(message) = (c[1], r[1][1], ..., r[1][m], ..., r[n][1], ..., r[n][m]) 
         - key imagaes (K'[1], ..., K'[m])
-//BIS HIER VORSICHT
+//END SKIP
 
     for j in [1,m]:
         - create MLSAG (sender / off-chain):
@@ -222,7 +222,7 @@ ________________________________________________________________________________
 
     - creating the transaction (sender / off-chain)
 
-        - 
+        
 
 
 

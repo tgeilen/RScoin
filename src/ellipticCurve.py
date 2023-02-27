@@ -1,7 +1,7 @@
 from ecpy.curves import Curve, Point
 
 
-class RingSignature:
+class EllipticCurve:
 
     #initalize curve
     curve = Curve.get_curve("secp256k1")
@@ -13,12 +13,6 @@ class RingSignature:
     H = Point(0x07cd9ee748a0b26773d9d29361f75594964106d13e1cad67cfe2df503ee3e90e,
             0xd209f7c16cdb6d3559bea88c7d920f8ff077406c615da8adfecdeef604cb40a6,
             curve)
-
-
-    def __init__(self,) -> None:
-        print("Initalizing new ring signature")
-
-
 
 
     def getG(self):
