@@ -1,4 +1,5 @@
 from ecpy.curves import Curve, Point
+import random
 
 
 class EllipticCurve:
@@ -14,6 +15,11 @@ class EllipticCurve:
             0xd209f7c16cdb6d3559bea88c7d920f8ff077406c615da8adfecdeef604cb40a6,
             curve)
 
+    P = int(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F)
+
+
+    def randomInt256():
+        return random.getrandbits(256) % EllipticCurve.P
 
     def getG(self):
         return self.G

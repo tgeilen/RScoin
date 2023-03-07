@@ -1,5 +1,6 @@
 import web3
 from wallet import Wallet
+from smartContract import SmartContract
 
 class Accounts:
 
@@ -30,11 +31,11 @@ class Accounts:
     "34e3148cb7adb428a81bb32520da7ae74604527e37b56e629a0669ea57920d99"
     ]
 
-    accounts = []
+    wallets = []
 
     w3 = 0
 
-    def  __init__ (self, w3:web3, limit:int = None):
+    def  __init__ (self, w3:web3, sc:SmartContract, limit:int = None):
 
         #adjust number of accounts
         if(limit != None):
@@ -46,19 +47,19 @@ class Accounts:
         #create public key for each private key
         for viewKey, signKey in zip(self.privateViewKeys, self.privateSignKeys):
             #store public key in accounts array
-            wallet = Wallet(w3, viewKey, signKey)
-            self.accounts.append(wallet)
-            print("viewKey: " + wallet.getViewKey())
-            print("signKey: " + wallet.getSignKey())
-            print()
+            wallet = Wallet(w3, viewKey, signKey, sc)
+            self.wallets.append(wallet)
+            #print("viewKey: " + wallet.getViewKey())
+            #print("signKey: " + wallet.getSignKey())
+            #print()
       
-        print(("-"*42 + "\n{} Accounts created\n" + "-"*42).format(len(self.accounts)))
+        print(("-"*42 + "\n{} Accounts created\n" + "-"*42).format(len(self.wallets)))
 
     def getPrivateKeys(self):
         return self.privateKeys
 
-    def getAccounts(self):
-        return self.accounts
+    def getWallets(self):
+        return self.wallets
 
-    def getAccount(self, accountNumber:int):
-        return self.accounts[accountNumber]
+    def getWallet(self, accountNumber:int)->Wallet:
+        return self.wallets[accountNumber]

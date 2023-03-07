@@ -180,6 +180,17 @@ ________________________________________________________________________________
         - key imagaes (K'[1], ..., K'[m])
 //END SKIP
 
+HIER WEITER MACHEN
+HIER WEITER MACHEN
+HIER WEITER MACHEN
+HIER WEITER MACHEN
+HIER WEITER MACHEN
+HIER WEITER MACHEN
+HIER WEITER MACHEN
+HIER WEITER MACHEN
+
+
+
     for j in [1,m]:
         - create MLSAG (sender / off-chain):
             - set key image K'[j] =  k0(j) * Hash(FK(p,j))  //Hash must return point on EC
@@ -223,8 +234,6 @@ ________________________________________________________________________________
     - creating the transaction (sender / off-chain)
 
         
-
-
 
 
 
