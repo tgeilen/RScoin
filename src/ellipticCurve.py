@@ -15,7 +15,9 @@ class EllipticCurve:
             0xd209f7c16cdb6d3559bea88c7d920f8ff077406c615da8adfecdeef604cb40a6,
             curve)
 
-    P = int(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F)
+    P = int(0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141)
+
+    
 
 
     def randomInt256():

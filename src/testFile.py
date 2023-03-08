@@ -1,6 +1,7 @@
 #import ecpy.curves as ECCurve
 from Crypto.Hash import keccak
 import random
+from  ellipticCurve import EllipticCurve
 
 from txOutput import TxOutput
 
@@ -41,7 +42,7 @@ amount = 50
 bf = ellipticCurve.EllipticCurve.randomInt256()
 r = ellipticCurve.EllipticCurve.randomInt256()
 
-txo = TxOutput(amount=amount, blindingFactor=bf, r=r)
+#txo = TxOutput(amount=amount, blindingFactor=bf, r=r)
 
 print((random.getrandbits(256)))
 
@@ -57,3 +58,5 @@ c1 X Y X Y X Y X Y X Y
 
 
 """
+
+print(-0xdf97fb4960e7e35bf0414e71cc08e4982a672e8af95e46caafd356d0f429471e1e37210b50724b5214e4b64d22b7f2b88a7cc8008b43ae430cf262edb62f2ce2 % EllipticCurve.P )

@@ -11,11 +11,11 @@ class TxOutput:
         self.address = address
         
 
-    def __init__(self, amount:int, blindingFactor:int, r:int, address:Point) -> None:
-        print("___ CREATING FAKE TXOUTPUT ___")
+    def __init__(self, amount:int, blindingFactor:int, rPubkey:int, transactionIndex:int, address:Point) -> None:
+        #print("___ CREATING FAKE TXOUTPUT ___")
         self.amountCommitement =  EllipticCurve.G.mul(blindingFactor).add(EllipticCurve.H.mul(amount))
-        self.rPubKey = r
-        self.transactionIndex = 0
+        self.rPubKey = rPubkey
+        self.transactionIndex = transactionIndex
         self.address = address
 
 

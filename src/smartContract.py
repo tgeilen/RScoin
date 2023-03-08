@@ -39,6 +39,11 @@ class SmartContract:
     
     def verifyTX(self, sig:tuple, message:str)->bool:
 
+        #for item in sig:
+        #    print(item[0])
+        #    print(item[1])
+        #    print(item[2])
+
         for i in range(len(sig)):
             keyImage = sig[i][1]
             ring = sig[i][2]
@@ -83,7 +88,7 @@ class SmartContract:
                     + self.point2String(self.G.mul(r1).add((K1).mul(c[l])))
                     + self.point2String((self.hash2Point(K1).mul(r1)).add(keyImage.mul(c[l])))
                     + self.point2String(self.G.mul(r2).add((K2.mul(c[l]))))
-                    + self.point2String((self.hash2Point(K2).mul(r2)))
+                    #+ self.point2String((self.hash2Point(K2).mul(r2)))
                 )
 
                 l+=1
@@ -106,7 +111,7 @@ class SmartContract:
                     + self.point2String(self.G.mul(r1).add((K1).mul(c[l])))
                     + self.point2String((self.hash2Point(K1).mul(r1)).add(keyImage.mul(c[l])))
                     + self.point2String(self.G.mul(r2).add((K2.mul(c[l]))))
-                    + self.point2String((self.hash2Point(K2).mul(r2)))
+                    #+ self.point2String((self.hash2Point(K2).mul(r2)))
                 )
             
             print()
@@ -148,7 +153,7 @@ class SmartContract:
 
 
     def point2String(self, point:Point):
-        return (str(point.x) + str(point.y))
+        return str(point)
 
 
     def hash(self, message:str)->str:  

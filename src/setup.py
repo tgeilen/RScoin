@@ -4,6 +4,7 @@ from wallet import Wallet
 from ellipticCurve import EllipticCurve
 from txOutput import TxOutput
 from smartContract import SmartContract
+import os
 
 #connect to local blockchain
 #w3 = web3.Web3(web3.Web3.HTTPProvider('http://127.0.0.1:7545'))
@@ -23,25 +24,32 @@ listBF = []
 
 
 
+
 for i in range(10):
     r = EllipticCurve.randomInt256()
     bf = EllipticCurve.randomInt256()
-    tmpAddress = wallet2.createInitalOutputAdress(r)
-    tx = TxOutput(10,bf,r, tmpAddress)
+    tmpAddress = wallet2.createInitalOutputAdress(r,i)
+    tx = TxOutput(10,bf,r, i, tmpAddress)
     sc.addTx(tx, tmpAddress)
     listR.append(r)
     listBF.append(bf)
 
+os.system("clear")
 
-amount = 10
+amount = 3
 
 for i in range(10):
-    address = wallet1.createInitalOutputAdress(r)
     bf = EllipticCurve.randomInt256()
     r = EllipticCurve.randomInt256()
-    txo = TxOutput(amount=amount, blindingFactor=bf, r=r, address = address)
+    address = wallet1.createInitalOutputAdress(r,i)
+    print("Adress in Setup:")
+    print(address)
+    
+    txo = TxOutput(amount=amount, blindingFactor=bf, rPubkey=r, transactionIndex=i, address = address)
 
-    wallet1.recieveTx(txo, bf, amount,address)
+    wallet1.receiveTx(txo, bf, amount,address)
+
+os.system("clear")
 
 receivers = {(wallet3.getViewKey(), wallet3.getSignKey()): 10}
 
