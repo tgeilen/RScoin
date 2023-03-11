@@ -37,19 +37,19 @@ contract ECC{
     }
 
     function mulPoint(uint256[2] memory _a, uint256 _scalar) external pure returns (uint256[2] memory){
-        (uint256 x, uint256 y)  = EllipticCurve.ecMul(_scalar, _a[0], _a[1], AA, PP);
+        (uint256 x, uint256 y)  = EllipticCurve.ecMul(_scalar % L, _a[0], _a[1], AA, PP);
         return [x,y];
 
     }
 
     function mulG(uint256 _scalar) external pure returns (uint256[2] memory){
-        (uint256 x, uint256 y)  = EllipticCurve.ecMul(_scalar, GX, GY, AA, PP);
+        (uint256 x, uint256 y)  = EllipticCurve.ecMul(_scalar % L, GX, GY, AA, PP);
         return [x,y];
 
     }
 
         function mulH(uint256 _scalar) external pure returns (uint256[2] memory){
-        (uint256 x, uint256 y)  = EllipticCurve.ecMul(_scalar, HX, HY, AA, PP);
+        (uint256 x, uint256 y)  = EllipticCurve.ecMul(_scalar % L, HX, HY, AA, PP);
         return [x,y];
 
     }

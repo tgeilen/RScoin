@@ -2,6 +2,7 @@
 from Crypto.Hash import keccak
 import random
 from  ellipticCurve import EllipticCurve
+from ecpy.curves import Curve, Point
 
 from txOutput import TxOutput
 
@@ -11,7 +12,11 @@ from web3 import Web3
 
 import json
 
-web3 = Web3(Web3.HTTPProvider('http://127.0.0.1:7545'))
+def point2String(point:Point):
+        return (str(point.x) + str(point.y)) 
+
+
+'''web3 = Web3(Web3.HTTPProvider('http://127.0.0.1:7545'))
 
 with open('src/abi.json', 'r') as f:
     contract_abi = json.load(f)
@@ -74,5 +79,19 @@ c1 X Y X Y X Y X Y X Y
 
 
 """
-
+'''
 print(-0xdf97fb4960e7e35bf0414e71cc08e4982a672e8af95e46caafd356d0f429471e1e37210b50724b5214e4b64d22b7f2b88a7cc8008b43ae430cf262edb62f2ce2 % EllipticCurve.L )
+
+G3 = point2String(ellipticCurve.EllipticCurve.G.mul(3))
+H3 = point2String(ellipticCurve.EllipticCurve.H.mul(3))
+
+addT = point2String(ellipticCurve.EllipticCurve.G.mul(3).add(ellipticCurve.EllipticCurve.H.mul(3)))
+print(G3)
+print(H3)
+print(addT)
+
+for i in range(1,4):
+        print(i)
+
+
+

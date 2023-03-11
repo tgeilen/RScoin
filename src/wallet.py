@@ -163,7 +163,7 @@ class Wallet:
             print("New AC: " + str((commitments[frozenset(input)]["nAC"])))
             
         v = 1 #number can be set to random value / num of fake ring member
-        message = self.hash("Hello World")
+        message = str(self.hash2Hex("Hello World"))
         
 
         ringList = []
@@ -222,6 +222,10 @@ class Wallet:
             for point in ring:
                 tmp = [self.point2Array(point[0]) , self.point2Array(point[1])]
                 sendableRing.append(tmp)
+
+            print("?"*90)
+            print(MLSAG[1:])
+            print("?"*90)
 
             sendableMLSAG = {"c1" : MLSAG[0],
                              "keyImage" : self.point2Array(keyImage),

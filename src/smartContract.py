@@ -53,6 +53,8 @@ class SmartContract:
             r = []
             k = []
 
+            
+
 
             #print(str(i+1) + " MLSAG: ")
             #print(range(0,len(sig[i][0])-3,2))
@@ -91,6 +93,21 @@ class SmartContract:
                     #+ self.point2String((self.hash2Point(K2).mul(r2)))
                 )
 
+                print("hier folgt debug")
+                print(message
+                        + self.point2String(self.G.mul(r1).add((K1).mul(c[l])))
+                        + self.point2String((self.hash2Point(K1).mul(r1)).add(keyImage.mul(c[l])))
+                        + self.point2String(self.G.mul(r2).add((K2.mul(c[l]))))
+                    )
+                print(self.point2String(self.G.mul(r1)))
+                print(self.point2String((K1).mul(c[l])))
+                print(self.point2String((self.hash2Point(K1).mul(r1))))
+                print(self.point2String(keyImage.mul(c[l])))
+                print(self.point2String(self.G.mul(r2)))
+                print(self.point2String(K2.mul(c[l])))
+                print(sig[i][0])
+                print("!"*90)
+
                 l+=1
 
                 
@@ -113,6 +130,8 @@ class SmartContract:
                     + self.point2String(self.G.mul(r2).add((K2.mul(c[l]))))
                     #+ self.point2String((self.hash2Point(K2).mul(r2)))
                 )
+            
+
             
             print()
             print("--------"*2)
@@ -165,8 +184,8 @@ class SmartContract:
     def hash2Hex(self, message:str)->int:
         k = keccak.new(digest_bits=256)  
         k.update(message.encode('UTF-8') )
-        return int(k.hexdigest(),16) % EllipticCurve.L
-
+        return int(k.hexdigest(),16) 
+        
     def hash2Point(self, message:str) -> Point: 
         if(type(message) == Point):
             message = self.point2String(message)

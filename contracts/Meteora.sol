@@ -2,8 +2,7 @@
 pragma solidity ^0.8.12;
 pragma experimental ABIEncoderV2;
  
-//import "./math/SafeMath.sol"; 
-//import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
 import "@openzeppelin/contracts/utils/Strings.sol";
 import {ECC} from "./ECC.sol";
 
@@ -12,7 +11,7 @@ import {ECC} from "./ECC.sol";
  
  contract Meteora{
 
-    int constant ringMember = 2;
+    int constant ringMember = 2; //v+1 aus wallet
 
     struct TestStruct{
         uint256[] test;
@@ -85,14 +84,16 @@ import {ECC} from "./ECC.sol";
         _signatures.inputs = inputs;
 
 
-
+        require(this.checkKeyImage(keyImage),
+        "The provided keyImage has been used before!");
         //for (uint256 i = 0; i < _signatures.length; i++) {
                 
                 //check that all signatures are correct
                 //hier wurde [i] entfernt
-                //require(this.verifyTransaction(_message, _signatures), 
-                //"The provided signatures were incorrect! \n The transaction will be canceled. ");
+        require(this.verifyTransaction(_message, _signatures), 
+        "The provided signatures were incorrect! \n The transaction will be canceled. ");
 
+        
         //}
 
         //for (uint256 i = 0; i < _signatures.length; i++) {
@@ -108,10 +109,11 @@ import {ECC} from "./ECC.sol";
         
         //event fehlt []
         //emit TransactionApproved(_outputs);
+        emit TestEvent(123);
 
-        return this.verifyTransaction(_message, _signatures);
+        
 
-        //return true;
+        return true;
     }
 
 
@@ -121,7 +123,7 @@ import {ECC} from "./ECC.sol";
             
             TmpStruct memory tmpStruct;
 
-            uint256[ringMember+100] memory c;
+            uint256[ringMember+1] memory c;
 
             
 
@@ -131,6 +133,8 @@ import {ECC} from "./ECC.sol";
 
 
             uint256[2][2][ringMember] memory ring = _signature.inputs;
+
+            //return _signature.rFactors;
 
             
             c[0] = _signature.c1;
@@ -149,21 +153,16 @@ import {ECC} from "./ECC.sol";
             uint256 j;
 
             
-
-            /*
-            uint256[2] memory tmp1;
-            uint256[2] memory tmp2;
-            uint256[2] memory tmp3;
-            uint256[2] memory tmp4;
-            uint256[2] memory tmp5;
-            uint256[2] memory tmp6;
-            */
            
             for (j = 0; j < _signature.rFactors.length-2; j=j+2) {
             //for (j = 0; j < 6; j=j+2) {
 
+                message = "";
                 r1 = _signature.rFactors[j];
                 r2 = _signature.rFactors[j+1];
+
+                //r1 = sig[i][0][j]
+                //r2 = sig[i][0][j+1]
 
                 /*if(j >= 4){
                 return l;
@@ -172,18 +171,21 @@ import {ECC} from "./ECC.sol";
                 K1 = ring[l][0];
                 K2 = ring[l][1];
 
+                //K1 = ring[l][0]
+                //K2 = ring[l][1]
+
                 
 
                 //need to avoid stack too deep error
                 tmpStruct.tmp1 = ecc.mulG(r1);
                 tmpStruct.tmp2 = ecc.mulPoint(K1,c[l]);
-                tmpStruct.tmp3 = ecc.mulPoint(K1,r1);
+                tmpStruct.tmp3 = ecc.mulPoint(hash2Point(K1),r1);
                 tmpStruct.tmp4 = ecc.mulPoint(keyImage,c[l]);
                 tmpStruct.tmp5 = ecc.mulG(r2);
                 tmpStruct.tmp6 = ecc.mulPoint(K2,c[l]);
 
+                            
                 
-
                 message = string.concat(
                                 Strings.toString(_message), 
                                 point2String(ecc.addPoints(tmpStruct.tmp1,tmpStruct.tmp2)));
@@ -195,10 +197,8 @@ import {ECC} from "./ECC.sol";
                                 point2String(ecc.addPoints(tmpStruct.tmp5,tmpStruct.tmp6)));
 
                 
-
+                //return message;
                 c[l+1] = hash2Hex(message);
-
-                
 
                 l++; 
                                        
@@ -206,7 +206,7 @@ import {ECC} from "./ECC.sol";
 
 
             
-           
+           message = "";
 
             j = _signature.rFactors.length-2;
 
@@ -225,16 +225,14 @@ import {ECC} from "./ECC.sol";
             //need to avoid stack too deep error
             tmpStruct.tmp1 = ecc.mulG(r1);
             tmpStruct.tmp2 = ecc.mulPoint(K1,c[l]);
-            tmpStruct.tmp3 = ecc.mulPoint(K1,r1);
-
-            
-
+            tmpStruct.tmp3 = ecc.mulPoint(hash2Point(K1),r1);
             tmpStruct.tmp4 = ecc.mulPoint(keyImage,c[l]);
-            //hier
             tmpStruct.tmp5 = ecc.mulG(r2);
-
-            
             tmpStruct.tmp6 = ecc.mulPoint(K2,c[l]);
+
+            //return [tmpStruct.tmp1,tmpStruct.tmp2,tmpStruct.tmp3,tmpStruct.tmp4,tmpStruct.tmp5,tmpStruct.tmp6];
+
+
 
             
 
@@ -251,22 +249,41 @@ import {ECC} from "./ECC.sol";
                    
             uint256 calcC = hash2Hex(message);
 
-            /*
-            if (c[0] != calcC){
-                //ring signature incorrect
-                return false;
-            } 
-            */
-            return (c[0] != calcC);
+            
+            return c[0] == calcC;
+
+
+            
+           
             
             
        
     }
 
 
+    function checkKeyImage(uint256[2] memory keyImage) public view returns (bool){
+        uint256[2] memory usedKeyImage;
+        for (uint256 index = 0; index < usedKeyImages.length; index++) {
+            usedKeyImage = usedKeyImages[0];
+            if(keyImage[0] == usedKeyImage[0] && keyImage[1] == usedKeyImage[1]){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     function getTXoutputs() public view  returns (TXoutput[] memory){
         return TXoutputs;
     }
+
+        function returnKeyImage() public view returns (uint256[2][] memory){
+        return usedKeyImages;
+    }
+
+
+
+
 
      function getInfo() public pure   returns (string memory){
         return "Hello World";
@@ -276,6 +293,8 @@ import {ECC} from "./ECC.sol";
         return _num;
     
     }
+
+
 
     function returnArr(uint256[] memory _arr) public pure   returns (uint256[] memory){
         return _arr;
@@ -291,6 +310,7 @@ import {ECC} from "./ECC.sol";
 
 
     event TransactionApproved (TXoutput _outputs);
+    event TestEvent(uint256 num);
 
     
     function point2String(uint256[2] memory _point) internal view returns (string memory){
@@ -306,6 +326,12 @@ import {ECC} from "./ECC.sol";
         uint256 scalar = uint256(keccak256(abi.encodePacked(_message)));
         return ecc.mulG(scalar);
     }
+
+    function hash2Point(uint256[2] memory _point) internal view returns (uint256[2] memory){
+        string memory _message = point2String(_point);
+        return hash2Point(_message);
+    }
+
 
 
 

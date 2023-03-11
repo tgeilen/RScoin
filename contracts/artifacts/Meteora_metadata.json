@@ -14,6 +14,19 @@
 				"anonymous": false,
 				"inputs": [
 					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "num",
+						"type": "uint256"
+					}
+				],
+				"name": "TestEvent",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
 						"components": [
 							{
 								"internalType": "uint256",
@@ -39,6 +52,25 @@
 				],
 				"name": "TransactionApproved",
 				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256[2]",
+						"name": "keyImage",
+						"type": "uint256[2]"
+					}
+				],
+				"name": "checkKeyImage",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			},
 			{
 				"inputs": [],
@@ -154,6 +186,19 @@
 					}
 				],
 				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "returnKeyImage",
+				"outputs": [
+					{
+						"internalType": "uint256[2][]",
+						"name": "",
+						"type": "uint256[2][]"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -362,11 +407,11 @@
 			]
 		},
 		"contracts/ECC.sol": {
-			"keccak256": "0x256846a422cb5ed36162b064bf02fe90f7ee550772cd259b66413c0351d53adc",
+			"keccak256": "0xbd85b3216082fad175b708188788e6a85a7dd375c181305e3c827415bedf827b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://85147ca437cc4be9c66012fef8b78cd4d7498cf9e1305dc8240b1ac2c10e94e7",
-				"dweb:/ipfs/QmZV3exiwuxDEbHMLumkRjgRA4WC7wYbrwMbHfrw3BXztb"
+				"bzz-raw://21a22da9b5d33c8805125ba6cf948782a25809dac8984efada460cba9087f97e",
+				"dweb:/ipfs/QmPHYd3RKQCUF9U1Kur7qfnzN1AoNS51L8akMTDA3jupzf"
 			]
 		},
 		"contracts/EllipticCurve.sol": {
@@ -378,11 +423,11 @@
 			]
 		},
 		"contracts/Meteora.sol": {
-			"keccak256": "0xaa37bdc91b369baab1f1d49a68dfc338cab6059f50799baa950e1191aedd12ed",
+			"keccak256": "0xa9266dc4bab30981e8bbcbb203855ba94c09dba3d73c5cfcd168004112e9101b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4fcfdab0d3452060da653c67b937411bee9aefae87db10fc43a1c724e02d609a",
-				"dweb:/ipfs/QmTT8GztP4kjirFo3wJ2AkEv4m9iVFMdjrTiE1oPv65RT4"
+				"bzz-raw://ba1d37476d5463193a55fa6c6af8c8e4039ac3eeb4bfe127f0e4a7421e8409ce",
+				"dweb:/ipfs/QmTN5bXFpm1yCmUJMXfaSpKijVfuqFZDfcctEy8wYPUhMy"
 			]
 		}
 	},
