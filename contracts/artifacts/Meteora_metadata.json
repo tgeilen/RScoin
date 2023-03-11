@@ -1,0 +1,390 @@
+{
+	"compiler": {
+		"version": "0.8.19+commit.7dd6d404"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "rPubKey",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256[2]",
+								"name": "amountCommitment",
+								"type": "uint256[2]"
+							},
+							{
+								"internalType": "uint16",
+								"name": "transactionIndex",
+								"type": "uint16"
+							}
+						],
+						"indexed": false,
+						"internalType": "struct Meteora.TXoutput",
+						"name": "_outputs",
+						"type": "tuple"
+					}
+				],
+				"name": "TransactionApproved",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "getInfo",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getTXoutputs",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "rPubKey",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256[2]",
+								"name": "amountCommitment",
+								"type": "uint256[2]"
+							},
+							{
+								"internalType": "uint16",
+								"name": "transactionIndex",
+								"type": "uint16"
+							}
+						],
+						"internalType": "struct Meteora.TXoutput[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_message",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "c1",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[2]",
+						"name": "keyImage",
+						"type": "uint256[2]"
+					},
+					{
+						"internalType": "uint256[4]",
+						"name": "rFactors",
+						"type": "uint256[4]"
+					},
+					{
+						"internalType": "uint256[2][2][2]",
+						"name": "inputs",
+						"type": "uint256[2][2][2]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rPubKey",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[2]",
+						"name": "amountCommitment",
+						"type": "uint256[2]"
+					},
+					{
+						"internalType": "uint16",
+						"name": "transactionIndex",
+						"type": "uint16"
+					}
+				],
+				"name": "receiveTransaction",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "_arr",
+						"type": "uint256[]"
+					}
+				],
+				"name": "returnArr",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "c1",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256[2]",
+								"name": "keyImage",
+								"type": "uint256[2]"
+							},
+							{
+								"internalType": "uint256[4]",
+								"name": "rFactors",
+								"type": "uint256[4]"
+							},
+							{
+								"internalType": "uint256[2][2][2]",
+								"name": "inputs",
+								"type": "uint256[2][2][2]"
+							}
+						],
+						"internalType": "struct Meteora.MLSAG",
+						"name": "_mlsag",
+						"type": "tuple"
+					}
+				],
+				"name": "returnMLSAG",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "c1",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256[2]",
+								"name": "keyImage",
+								"type": "uint256[2]"
+							},
+							{
+								"internalType": "uint256[4]",
+								"name": "rFactors",
+								"type": "uint256[4]"
+							},
+							{
+								"internalType": "uint256[2][2][2]",
+								"name": "inputs",
+								"type": "uint256[2][2][2]"
+							}
+						],
+						"internalType": "struct Meteora.MLSAG",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_num",
+						"type": "uint256"
+					}
+				],
+				"name": "returnNum",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256[]",
+								"name": "test",
+								"type": "uint256[]"
+							}
+						],
+						"internalType": "struct Meteora.TestStruct",
+						"name": "_struct",
+						"type": "tuple"
+					}
+				],
+				"name": "returnStruct",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256[]",
+								"name": "test",
+								"type": "uint256[]"
+							}
+						],
+						"internalType": "struct Meteora.TestStruct",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_message",
+						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "c1",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256[2]",
+								"name": "keyImage",
+								"type": "uint256[2]"
+							},
+							{
+								"internalType": "uint256[4]",
+								"name": "rFactors",
+								"type": "uint256[4]"
+							},
+							{
+								"internalType": "uint256[2][2][2]",
+								"name": "inputs",
+								"type": "uint256[2][2][2]"
+							}
+						],
+						"internalType": "struct Meteora.MLSAG",
+						"name": "_signature",
+						"type": "tuple"
+					}
+				],
+				"name": "verifyTransaction",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Meteora.sol": "Meteora"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/utils/Strings.sol": {
+			"keccak256": "0xa4d1d62251f8574deb032a35fc948386a9b4de74b812d4f545a1ac120486b48a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8c969013129ba9e651a20735ef659fef6d8a1139ea3607bd4b26ddea2d645634",
+				"dweb:/ipfs/QmVhVa6LGuzAcB8qgDtVHRkucn4ihj5UZr8xBLcJkP6ucb"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/Math.sol": {
+			"keccak256": "0xa1e8e83cd0087785df04ac79fb395d9f3684caeaf973d9e2c71caef723a3a5d6",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://33bbf48cc069be677705037ba7520c22b1b622c23b33e1a71495f2d36549d40b",
+				"dweb:/ipfs/Qmct36zWXv3j7LZB83uwbg7TXwnZSN1fqHNDZ93GG98bGz"
+			]
+		},
+		"contracts/ECC.sol": {
+			"keccak256": "0x256846a422cb5ed36162b064bf02fe90f7ee550772cd259b66413c0351d53adc",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://85147ca437cc4be9c66012fef8b78cd4d7498cf9e1305dc8240b1ac2c10e94e7",
+				"dweb:/ipfs/QmZV3exiwuxDEbHMLumkRjgRA4WC7wYbrwMbHfrw3BXztb"
+			]
+		},
+		"contracts/EllipticCurve.sol": {
+			"keccak256": "0xa8981a3d886881ee6b37b0f499453780f54c914fd3ced186ed63923c4166a764",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7ddc8e55b6e295b722a779c284ebe1ab14d210ee2c949b3c104a53f7dc740d78",
+				"dweb:/ipfs/QmXcAybF85vmZhEnft1SshLKy3ZFq7hemoomVBNW3m717W"
+			]
+		},
+		"contracts/Meteora.sol": {
+			"keccak256": "0xaa37bdc91b369baab1f1d49a68dfc338cab6059f50799baa950e1191aedd12ed",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4fcfdab0d3452060da653c67b937411bee9aefae87db10fc43a1c724e02d609a",
+				"dweb:/ipfs/QmTT8GztP4kjirFo3wJ2AkEv4m9iVFMdjrTiE1oPv65RT4"
+			]
+		}
+	},
+	"version": 1
+}

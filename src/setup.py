@@ -1,10 +1,11 @@
-import web3
+from web3 import Web3
 from accounts import Accounts
 from wallet import Wallet
 from ellipticCurve import EllipticCurve
 from txOutput import TxOutput
 from smartContract import SmartContract
 import os
+import json
 
 #connect to local blockchain
 #w3 = web3.Web3(web3.Web3.HTTPProvider('http://127.0.0.1:7545'))
@@ -21,8 +22,6 @@ sc = SmartContract()
 
 listR = []
 listBF = []
-
-
 
 
 for i in range(10):
@@ -54,7 +53,7 @@ os.system("clear")
 receivers = {(wallet3.getViewKey(), wallet3.getSignKey()): 10}
 
 
-message , sig = (wallet1.createTransaction(receivers))
+message , sig, outputs , sMLSAGS = (wallet1.createTransaction(receivers))
 
 '''
 for i in range(len(sig)):
@@ -67,6 +66,54 @@ for i in range(len(sig)):
 '''
 
 print(sc.verifyTX(sig, message))
+
+
+web3 = Web3(Web3.HTTPProvider('http://127.0.0.1:7545'))
+
+with open('src/abi.json', 'r') as f:
+    contract_abi = json.load(f)
+
+contract_address = '0x4d7C80fCdbB3917E7ED07065096180653Af0c3b3'
+
+contract = web3.eth.contract(address=contract_address, abi=contract_abi)
+
+result = contract.functions.getInfo().call()
+
+print(result)
+
+#result = contract.functions.receiveTransaction(int(message,16), tuple(sMLSAGS[0]), tuple(outputs[0])).transact()
+print(result)
+
+result = contract.functions.returnNum(int(message,16)).call()
+
+print(sMLSAGS)
+
+print(result)
+
+result = contract.functions.returnArr((1,2)).call()
+
+print(result)
+
+result = contract.functions.returnStruct({"test":(1,2)})
+
+print(result)
+
+#result = contract.functions.returnMLSAG(tuple(sMLSAGS)).call()
+print (result)
+
+
+result = contract.functions.receiveTransaction(
+    int(message,16), 
+    sMLSAGS[0]["c1"],
+    sMLSAGS[0]["keyImage"],
+    sMLSAGS[0]["rFactors"],
+    sMLSAGS[0]["inputs"],
+    0,
+    [1,2],
+    1
+    ).call()
+
+print(result)
 
 
 

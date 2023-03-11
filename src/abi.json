@@ -1,0 +1,314 @@
+[
+    {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "rPubKey",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256[2]",
+                        "name": "amountCommitment",
+                        "type": "uint256[2]"
+                    },
+                    {
+                        "internalType": "uint16",
+                        "name": "transactionIndex",
+                        "type": "uint16"
+                    }
+                ],
+                "indexed": false,
+                "internalType": "struct Meteora.TXoutput",
+                "name": "_outputs",
+                "type": "tuple"
+            }
+        ],
+        "name": "TransactionApproved",
+        "type": "event"
+    },
+    {
+        "inputs": [],
+        "name": "getInfo",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getTXoutputs",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "rPubKey",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256[2]",
+                        "name": "amountCommitment",
+                        "type": "uint256[2]"
+                    },
+                    {
+                        "internalType": "uint16",
+                        "name": "transactionIndex",
+                        "type": "uint16"
+                    }
+                ],
+                "internalType": "struct Meteora.TXoutput[]",
+                "name": "",
+                "type": "tuple[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_message",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "c1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256[2]",
+                "name": "keyImage",
+                "type": "uint256[2]"
+            },
+            {
+                "internalType": "uint256[4]",
+                "name": "rFactors",
+                "type": "uint256[4]"
+            },
+            {
+                "internalType": "uint256[2][2][2]",
+                "name": "inputs",
+                "type": "uint256[2][2][2]"
+            },
+            {
+                "internalType": "uint256",
+                "name": "rPubKey",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256[2]",
+                "name": "amountCommitment",
+                "type": "uint256[2]"
+            },
+            {
+                "internalType": "uint16",
+                "name": "transactionIndex",
+                "type": "uint16"
+            }
+        ],
+        "name": "receiveTransaction",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "_arr",
+                "type": "uint256[]"
+            }
+        ],
+        "name": "returnArr",
+        "outputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "c1",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256[2]",
+                        "name": "keyImage",
+                        "type": "uint256[2]"
+                    },
+                    {
+                        "internalType": "uint256[4]",
+                        "name": "rFactors",
+                        "type": "uint256[4]"
+                    },
+                    {
+                        "internalType": "uint256[2][2][2]",
+                        "name": "inputs",
+                        "type": "uint256[2][2][2]"
+                    }
+                ],
+                "internalType": "struct Meteora.MLSAG",
+                "name": "_mlsag",
+                "type": "tuple"
+            }
+        ],
+        "name": "returnMLSAG",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "c1",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256[2]",
+                        "name": "keyImage",
+                        "type": "uint256[2]"
+                    },
+                    {
+                        "internalType": "uint256[4]",
+                        "name": "rFactors",
+                        "type": "uint256[4]"
+                    },
+                    {
+                        "internalType": "uint256[2][2][2]",
+                        "name": "inputs",
+                        "type": "uint256[2][2][2]"
+                    }
+                ],
+                "internalType": "struct Meteora.MLSAG",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_num",
+                "type": "uint256"
+            }
+        ],
+        "name": "returnNum",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256[]",
+                        "name": "test",
+                        "type": "uint256[]"
+                    }
+                ],
+                "internalType": "struct Meteora.TestStruct",
+                "name": "_struct",
+                "type": "tuple"
+            }
+        ],
+        "name": "returnStruct",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256[]",
+                        "name": "test",
+                        "type": "uint256[]"
+                    }
+                ],
+                "internalType": "struct Meteora.TestStruct",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_message",
+                "type": "uint256"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "c1",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256[2]",
+                        "name": "keyImage",
+                        "type": "uint256[2]"
+                    },
+                    {
+                        "internalType": "uint256[4]",
+                        "name": "rFactors",
+                        "type": "uint256[4]"
+                    },
+                    {
+                        "internalType": "uint256[2][2][2]",
+                        "name": "inputs",
+                        "type": "uint256[2][2][2]"
+                    }
+                ],
+                "internalType": "struct Meteora.MLSAG",
+                "name": "_signature",
+                "type": "tuple"
+            }
+        ],
+        "name": "verifyTransaction",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]

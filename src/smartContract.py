@@ -48,7 +48,7 @@ class SmartContract:
             keyImage = sig[i][1]
             ring = sig[i][2]
             c = {}
-            c[0] = int(sig[i][0][0],16)
+            c[0] = sig[i][0][0]
             l = 0
             r = []
             k = []
@@ -58,8 +58,8 @@ class SmartContract:
             #print(range(0,len(sig[i][0])-3,2))
             for j in range(1,len(sig[i][0])-2,2):
 
-                r1 = int(sig[i][0][j],16)
-                r2 = int(sig[i][0][j+1],16)
+                r1 = sig[i][0][j]
+                r2 = sig[i][0][j+1]
                 r.append((r1,r2))
 
                 K1 = ring[l][0]
@@ -97,8 +97,8 @@ class SmartContract:
 
             j = len(sig[i][0])-2
             #print(j)
-            r1 = int(sig[i][0][j],16)
-            r2 = int(sig[i][0][j+1], 16)
+            r1 = sig[i][0][j]
+            r2 = sig[i][0][j+1]
             #print(ring)
             #print(len(ring))
             #print(l)
@@ -124,12 +124,13 @@ class SmartContract:
             print("--------")
 
             for i in range(len(r)):
+                tmp = hex(r[i][0])
                 print(str(i) + ". sc R1: " + str(hex(r[i][0])))
                 print(str(i) + ". sc R2: " + str(hex(r[i][1])))
             print("--------")
             for i in range(len(k)):
-                print(str(i) + ". sc K1: " + str((k[i][0])))
-                print(str(i) + ". sc K2: " + str((k[i][1])))
+                print(str(i) + ". sc K1: " + self.point2String((k[i][0])))
+                print(str(i) + ". sc K2: " + self.point2String((k[i][1])))
 
         
             
@@ -153,7 +154,7 @@ class SmartContract:
 
 
     def point2String(self, point:Point):
-        return str(point)
+        return (str(point.x) + str(point.y))
 
 
     def hash(self, message:str)->str:  
@@ -164,10 +165,13 @@ class SmartContract:
     def hash2Hex(self, message:str)->int:
         k = keccak.new(digest_bits=256)  
         k.update(message.encode('UTF-8') )
-        return int(k.hexdigest(),16)
+        return int(k.hexdigest(),16) % EllipticCurve.L
 
     def hash2Point(self, message:str) -> Point: 
-        message = str(message)
+        if(type(message) == Point):
+            message = self.point2String(message)
+        else:
+            message = str(message)
         k = keccak.new(digest_bits=256) 
         k.update(message.encode('UTF-8') )
         return self.G.mul(int(k.hexdigest(),16))

@@ -245,3 +245,36 @@ Topics currently not included:
     - Deffie-Hellman for information sharing (blinding factor, amount of commitment)
     - Sub-addresses
     - Transaction fees
+
+
+
+    TODO:
+
+    - es können keine objekte versendet werden. beim transfer der txOutputs müssen
+    daher alle tx in listen gesendet werden
+
+
+
+    Problem:
+
+   - Ethereum erlaubt keine dynamic arrays als parameter von funltionen 
+    (arrays in memory cannot be dynamic). daher muss vorher bekannt sein,
+    aus wievielen inputs eine transaction besteht. um alle transactions zu 
+    ermöglichen, muss die input size = 1 sein. da der sender höchstwahrscheinlich
+    keinen passenden input für einen output hat gibt es zwei möglichkeiten:
+    der sender teilt einen input auf (sendet input an sich mit passendem output und rest) oder
+    sendet mehrfach kleinere beträge, bis summe zielwert entspricht. eine kombination ist auch möglich und
+    am wahrscheinlichsten.
+    die tranaktionkosten sind aktuell bereits sehr hoch. durch das aufteilen der inputs
+    würde eine weitere transaktion hinzukommen, durch das senden kleinere beträge deutlich mehr
+    leg man eine minimale werteinheit fest (bspw. 0,01) würden über die zeit, alle outputs
+    gegn diese konvergieren, da wie beschrieben eine kombination von n Outputs
+    zu einem Input nicht möglich ist. Folglich würde langfristig eine transaktion
+    mit transaktionkosten von singleTransactionPrice*(totalAmount / 0,01) verbunden sein. 
+    Man sieht schnell, dass dies nicht realistisch ist und zu enormen tranaktionkosten
+    führt.
+    hinzukommt, dass durch die hohen transaktionkosten inputs mit hohen beträgen deutlich mehr wert
+    sind als eine menge von transaktionen mit gleichem summierten geldwerten.
+
+    
+

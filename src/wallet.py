@@ -99,6 +99,7 @@ class Wallet:
         t = 0
 
         outputs = []
+        publicOutputs = []
 
         r = EllipticCurve.randomInt256() #rG is transaction PubKey
 
@@ -118,12 +119,18 @@ class Wallet:
 
             outputInfo = {"txAddress" : txAddress,
                           "amountCommitment" : amountCommitment,
-                          "r" : r,
+                          "rPubKey" : r,
                           "blindingFactor" : y,
                           "receiver" : keys,
                           "transactionIndex" : t}
+            
+            publicOutput = {"rPubKey" : r,
+                            "amountCommitment" : amountCommitment,
+                            "transactionIndex":t
+            }
 
             outputs.append(outputInfo)
+            publicOutputs.append(publicOutputs)
             sumOutputBF += y
             t+=1
         
@@ -155,12 +162,13 @@ class Wallet:
             print("Old AC: " + str((commitments[frozenset(input)]["oAC"])))
             print("New AC: " + str((commitments[frozenset(input)]["nAC"])))
             
-        v = 5 #number can be set to random value
-        message = "Hello World"
+        v = 1 #number can be set to random value / num of fake ring member
+        message = self.hash("Hello World")
         
 
         ringList = []
         mlsags = []
+        sendableMLSAGs = []
         for input in inputList:
             p = random.randint(0, v-1)
             i = 0
@@ -210,10 +218,26 @@ class Wallet:
 
             mlsags.append((MLSAG, keyImage, ring))
 
+            sendableRing = []
+            for point in ring:
+                tmp = [self.point2Array(point[0]) , self.point2Array(point[1])]
+                sendableRing.append(tmp)
+
+            sendableMLSAG = {"c1" : MLSAG[0],
+                             "keyImage" : self.point2Array(keyImage),
+                             "rFactors" : MLSAG[1:],
+                             "inputs" : sendableRing
+                             }
+            
+            sendableMLSAGs.append(sendableMLSAG)
+
+
+            
+
         ##START OF MLSAG
 
 
-        return (message, mlsags)
+        return (message, mlsags, publicOutputs, sendableMLSAGs)
        
 
     def createOutputAdress(self, r:int, t:int, keys:tuple)->Point:
@@ -401,7 +425,7 @@ class Wallet:
 
 
         ### hier ist ein fehler
-        r[p] = ((alpha1 - k0 * c[p]) % (EllipticCurve.P), (alpha2 - z * c[p]) % (EllipticCurve.P))        #og
+        r[p] = ((alpha1 - k0 * c[p]) % (EllipticCurve.L), (alpha2 - z * c[p]) % (EllipticCurve.L))        #og
         #r[p] = ((alpha1 - (k0 * c[p])), (alpha2 - c[p] * z))
         ### 
 
@@ -505,12 +529,12 @@ class Wallet:
             print(str(i) + ". og R2: " + str(hex(r[i][1])))
         
        
-        signature = [hex(c[0])]
+        signature = [int(c[0])]
         for i in range(len(r)):
             for j in (0,1):
-                signature.append(hex(r[i][j]))
+                signature.append(int(r[i][j]))
 
-        return tuple(signature)
+        return signature
 
         
 
@@ -527,8 +551,12 @@ class Wallet:
         }
         self.ownedOutputs.append(transactionDetails)
 
+    
+    def point2Array(self, point:Point):
+        return [point.x,point.y]
+    
     def point2String(self, point:Point):
-        return str(point)
+        return (str(point.x) + str(point.y)) 
 
 
     def hash(self, message:str)->str:  
@@ -539,10 +567,13 @@ class Wallet:
     def hash2Hex(self, message:str)->int:
         k = keccak.new(digest_bits=256)  
         k.update(message.encode('UTF-8') )
-        return int(k.hexdigest(),16) % EllipticCurve.P
+        return int(k.hexdigest(),16) % EllipticCurve.L
 
     def hash2Point(self, message:str) -> Point: 
-        message = str(message)
+        if(type(message) == Point):
+            message = self.point2String(message)
+        else:
+            message = str(message)
         k = keccak.new(digest_bits=256) 
         k.update(message.encode('UTF-8') )
         return self.G.mul(int(k.hexdigest(),16))
