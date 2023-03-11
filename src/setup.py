@@ -68,12 +68,14 @@ for i in range(len(sig)):
 print(sc.verifyTX(sig, message))
 
 
-web3 = Web3(Web3.HTTPProvider('http://127.0.0.1:7545'))
+web3 = Web3(Web3.HTTPProvider('http://127.0.0.1:7545', request_kwargs={'timeout': 6000}))
 
 with open('src/abi.json', 'r') as f:
     contract_abi = json.load(f)
 
-contract_address = '0x4d7C80fCdbB3917E7ED07065096180653Af0c3b3'
+contract_address = '0x957822DDb13f4F68AdA9AA72fd72E61e2e376da6'
+
+sender_adress = "0xe46144b2322444de96E2801CFdc0a7AF0284a1aC"
 
 contract = web3.eth.contract(address=contract_address, abi=contract_abi)
 
@@ -102,7 +104,7 @@ print(result)
 print (result)
 
 
-result = contract.functions.receiveTransaction(
+tx_hash = contract.functions.receiveTransaction(
     int(message,16), 
     sMLSAGS[0]["c1"],
     sMLSAGS[0]["keyImage"],
@@ -111,9 +113,11 @@ result = contract.functions.receiveTransaction(
     0,
     [1,2],
     1
-    ).call()
+    ).transact({'from': sender_adress})
 
-print(result)
+tx_receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
+
+print(tx_receipt)
 
 
 
