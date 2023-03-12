@@ -35,9 +35,9 @@ class Wallet:
 
     k = keccak.new(digest_bits=256)
 
-    def __init__(self, w3:web3, privateViewKey:str, privateSignKey:str, smartContract:SmartContract) -> None:
+    def __init__(self, contract, privateViewKey:str, privateSignKey:str, smartContract:SmartContract) -> None:
         
-        self.w3 = w3
+        self.contract = contract
 
         self.privateViewKey = int(privateViewKey,16)
         self.privateSignKey = int(privateSignKey,16)
@@ -124,13 +124,14 @@ class Wallet:
                           "receiver" : keys,
                           "transactionIndex" : t}
             
-            publicOutput = {"rPubKey" : r,
+            publicOutput = {"txAddress" : txAddress,
+                            "rPubKey" : r,
                             "amountCommitment" : amountCommitment,
                             "transactionIndex":t
             }
 
             outputs.append(outputInfo)
-            publicOutputs.append(publicOutputs)
+            publicOutputs.append(publicOutput)
             sumOutputBF += y
             t+=1
         
@@ -163,7 +164,7 @@ class Wallet:
             print("New AC: " + str((commitments[frozenset(input)]["nAC"])))
             
         v = 1 #number can be set to random value / num of fake ring member
-        message = str(self.hash2Hex("Hello World"))
+        
         
 
         ringList = []
@@ -191,7 +192,7 @@ class Wallet:
                 
                 diff = nAC.sub(oAC) 
                 
-                ring.append((member["address"],diff))
+                ring.append((member["txAddress"],diff))
                 i+=1
                 
             ringList.append(ring)
@@ -200,7 +201,7 @@ class Wallet:
             keyImage, k0 = self.createKeyImage(inputAdress=input["txAddress"], r=input["r"], t=input["transactionIndex"])
 
 
-
+            message = str(self.hash2Hex(str(ringList)))
             
             r = input["r"]
             t = input["transactionIndex"]
@@ -226,6 +227,10 @@ class Wallet:
             print("?"*90)
             print(MLSAG[1:])
             print("?"*90)
+
+            for output in publicOutputs:
+                output["amountCommitment"] = [output["amountCommitment"].x, output["amountCommitment"].y]
+                output["txAddress"] = [output["txAddress"].x, output["txAddress"].y]
 
             sendableMLSAG = {"c1" : MLSAG[0],
                              "keyImage" : self.point2Array(keyImage),
@@ -311,7 +316,19 @@ class Wallet:
 
             #return list of v tuple (one-time address, amountCommitment)
 
-            return self.smartContract.getRandomTx(v)
+            allTxoutputs = self.contract.functions.getTXoutputs().call()
+            result = []
+            for i in range(v):
+                output = random.choice(allTxoutputs)
+                result.append({
+                    "rPubKey" : output[0],
+                    "amountCommitment" : Point(output[1][0],output[1][1],self.cv),
+                    "transactionIndex":output[2],
+                    "txAddress": Point(output[3][0],output[3][1],self.cv)
+                })
+
+            return result
+            #return self.smartContract.getRandomTx(v)
 
     def createKeyImage(self, r:int, t:int, inputAdress:Point):
         #r and t specified by input

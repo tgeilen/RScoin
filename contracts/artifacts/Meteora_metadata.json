@@ -14,19 +14,6 @@
 				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "num",
-						"type": "uint256"
-					}
-				],
-				"name": "TestEvent",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
 						"components": [
 							{
 								"internalType": "uint256",
@@ -42,6 +29,11 @@
 								"internalType": "uint16",
 								"name": "transactionIndex",
 								"type": "uint16"
+							},
+							{
+								"internalType": "uint256[2]",
+								"name": "txOAddress",
+								"type": "uint256[2]"
 							}
 						],
 						"indexed": false,
@@ -105,6 +97,11 @@
 								"internalType": "uint16",
 								"name": "transactionIndex",
 								"type": "uint16"
+							},
+							{
+								"internalType": "uint256[2]",
+								"name": "txOAddress",
+								"type": "uint256[2]"
 							}
 						],
 						"internalType": "struct Meteora.TXoutput[]",
@@ -119,43 +116,82 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
+						"name": "_rPubKey",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[2]",
+						"name": "_amountCommitment",
+						"type": "uint256[2]"
+					},
+					{
+						"internalType": "uint16",
+						"name": "_transactionIndex",
+						"type": "uint16"
+					},
+					{
+						"internalType": "uint256[2]",
+						"name": "_txOAddress",
+						"type": "uint256[2]"
+					}
+				],
+				"name": "receiveOutput",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
 						"name": "_message",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "c1",
+						"name": "_c1",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256[2]",
-						"name": "keyImage",
+						"name": "_keyImage",
 						"type": "uint256[2]"
 					},
 					{
 						"internalType": "uint256[4]",
-						"name": "rFactors",
+						"name": "_rFactors",
 						"type": "uint256[4]"
 					},
 					{
 						"internalType": "uint256[2][2][2]",
-						"name": "inputs",
+						"name": "_inputs",
 						"type": "uint256[2][2][2]"
 					},
 					{
 						"internalType": "uint256",
-						"name": "rPubKey",
+						"name": "_rPubKey",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256[2]",
-						"name": "amountCommitment",
+						"name": "_amountCommitment",
 						"type": "uint256[2]"
 					},
 					{
 						"internalType": "uint16",
-						"name": "transactionIndex",
+						"name": "_transactionIndex",
 						"type": "uint16"
+					},
+					{
+						"internalType": "uint256[2]",
+						"name": "_txOAddress",
+						"type": "uint256[2]"
 					}
 				],
 				"name": "receiveTransaction",
@@ -286,39 +322,6 @@
 			{
 				"inputs": [
 					{
-						"components": [
-							{
-								"internalType": "uint256[]",
-								"name": "test",
-								"type": "uint256[]"
-							}
-						],
-						"internalType": "struct Meteora.TestStruct",
-						"name": "_struct",
-						"type": "tuple"
-					}
-				],
-				"name": "returnStruct",
-				"outputs": [
-					{
-						"components": [
-							{
-								"internalType": "uint256[]",
-								"name": "test",
-								"type": "uint256[]"
-							}
-						],
-						"internalType": "struct Meteora.TestStruct",
-						"name": "",
-						"type": "tuple"
-					}
-				],
-				"stateMutability": "pure",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
 						"internalType": "uint256",
 						"name": "_message",
 						"type": "uint256"
@@ -359,7 +362,7 @@
 						"type": "bool"
 					}
 				],
-				"stateMutability": "nonpayable",
+				"stateMutability": "view",
 				"type": "function"
 			}
 		],
@@ -423,11 +426,11 @@
 			]
 		},
 		"contracts/Meteora.sol": {
-			"keccak256": "0xa9266dc4bab30981e8bbcbb203855ba94c09dba3d73c5cfcd168004112e9101b",
+			"keccak256": "0xd9ba5553c8f4fe80d588c02f498d7609c8daf0407b0713e76f93bbd8860448cb",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://ba1d37476d5463193a55fa6c6af8c8e4039ac3eeb4bfe127f0e4a7421e8409ce",
-				"dweb:/ipfs/QmTN5bXFpm1yCmUJMXfaSpKijVfuqFZDfcctEy8wYPUhMy"
+				"bzz-raw://b9a530568508f57e4fd4dd2f4ae03c99cc4b8591a976ce5478f10e4a11df65e8",
+				"dweb:/ipfs/QmV6gyasCS1D6SsRY3mghxXHhQaSpmmy3t4u5NKQrfShuD"
 			]
 		}
 	},

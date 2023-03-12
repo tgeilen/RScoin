@@ -13,15 +13,11 @@ import {ECC} from "./ECC.sol";
 
     int constant ringMember = 2; //v+1 aus wallet
 
-    struct TestStruct{
-        uint256[] test;
-    }
-
-
     struct TXoutput{
         uint256 rPubKey;
         uint256[2] amountCommitment;
         uint16 transactionIndex; //used as t in one-time key creation
+        uint256[2] txOAddress;
     }
 
     struct MLSAG{
@@ -32,7 +28,6 @@ import {ECC} from "./ECC.sol";
         uint256[2][2][ringMember] inputs; //list of addresses used in signature (real and fake)
 
     }
-
 
     struct TmpStruct {
         uint256[2]  tmp1;
@@ -65,32 +60,33 @@ import {ECC} from "./ECC.sol";
 
     //hier wurde [i] entfernt bei MLSAG und TXoutput
     //function receiveTransaction(uint256 _message, MLSAG memory _signatures, TXoutput memory _outputs) public returns (bool){
-    function receiveTransaction(uint256 _message, uint256 c1,
-        uint256[2] memory keyImage, //2d point 
-        uint256[ringMember*2] memory rFactors, //array of 2 commitments being 2d points
-        uint256[2][2][ringMember] memory inputs,
-        uint256 rPubKey,
-        uint256[2] memory amountCommitment,
-        uint16  transactionIndex) public returns (bool){
+    function receiveTransaction(uint256 _message, uint256 _c1,
+        uint256[2] memory _keyImage, //2d point 
+        uint256[ringMember*2] memory _rFactors, //array of 2 commitments being 2d points
+        uint256[2][2][ringMember] memory _inputs,
+        uint256 _rPubKey,
+        uint256[2] memory _amountCommitment,
+        uint16  _transactionIndex,
+        uint256[2] memory _txOAddress) public returns (bool){
 
         
 
-        MLSAG memory _signatures;
+        MLSAG memory signature;
         
 
-        _signatures.c1 = c1;
-        _signatures.keyImage = keyImage;
-        _signatures.rFactors = rFactors;
-        _signatures.inputs = inputs;
+        signature.c1 = _c1;
+        signature.keyImage = _keyImage;
+        signature.rFactors = _rFactors;
+        signature.inputs = _inputs;
 
 
-        require(this.checkKeyImage(keyImage),
+        require(this.checkKeyImage(_keyImage),
         "The provided keyImage has been used before!");
         //for (uint256 i = 0; i < _signatures.length; i++) {
                 
                 //check that all signatures are correct
                 //hier wurde [i] entfernt
-        require(this.verifyTransaction(_message, _signatures), 
+        require(this.verifyTransaction(_message, signature), 
         "The provided signatures were incorrect! \n The transaction will be canceled. ");
 
         
@@ -98,7 +94,7 @@ import {ECC} from "./ECC.sol";
 
         //for (uint256 i = 0; i < _signatures.length; i++) {
             //hier wurde [i] entfernt
-            usedKeyImages.push((_signatures.keyImage));
+            usedKeyImages.push((signature.keyImage));
         //} 
 
         //for (uint256 i = 0; i < _outputs.length; i++) {
@@ -109,7 +105,9 @@ import {ECC} from "./ECC.sol";
         
         //event fehlt []
         //emit TransactionApproved(_outputs);
-        emit TestEvent(123);
+        
+
+        this.receiveOutput(_rPubKey, _amountCommitment, _transactionIndex, _txOAddress);
 
         
 
@@ -117,7 +115,7 @@ import {ECC} from "./ECC.sol";
     }
 
 
-    function verifyTransaction(uint256 _message, MLSAG memory _signature) public returns (bool){
+    function verifyTransaction(uint256 _message, MLSAG memory _signature) public view returns (bool){
 
             
             
@@ -125,20 +123,9 @@ import {ECC} from "./ECC.sol";
 
             uint256[ringMember+1] memory c;
 
-            
-
             uint256[2] memory keyImage = _signature.keyImage;
-
-            
-
-
             uint256[2][2][ringMember] memory ring = _signature.inputs;
-
-            //return _signature.rFactors;
-
-            
             c[0] = _signature.c1;
-    
 
             uint256 l = 0;
 
@@ -161,19 +148,8 @@ import {ECC} from "./ECC.sol";
                 r1 = _signature.rFactors[j];
                 r2 = _signature.rFactors[j+1];
 
-                //r1 = sig[i][0][j]
-                //r2 = sig[i][0][j+1]
-
-                /*if(j >= 4){
-                return l;
-                }*/
-
                 K1 = ring[l][0];
                 K2 = ring[l][1];
-
-                //K1 = ring[l][0]
-                //K2 = ring[l][1]
-
                 
 
                 //need to avoid stack too deep error
@@ -230,11 +206,6 @@ import {ECC} from "./ECC.sol";
             tmpStruct.tmp5 = ecc.mulG(r2);
             tmpStruct.tmp6 = ecc.mulPoint(K2,c[l]);
 
-            //return [tmpStruct.tmp1,tmpStruct.tmp2,tmpStruct.tmp3,tmpStruct.tmp4,tmpStruct.tmp5,tmpStruct.tmp6];
-
-
-
-            
 
                message = string.concat(
                                 Strings.toString(_message), 
@@ -272,8 +243,28 @@ import {ECC} from "./ECC.sol";
         return true;
     }
 
+    function receiveOutput(uint256 _rPubKey,
+        uint256[2] memory _amountCommitment,
+        uint16  _transactionIndex,
+        uint256[2] memory _txOAddress) public returns (bool){
+            //this function is used to fill contract with inital outputs after creation
+            
+        TXoutput memory txOutput;
+
+        txOutput.rPubKey = _rPubKey;
+        txOutput.amountCommitment = _amountCommitment;
+        txOutput.transactionIndex = _transactionIndex;
+        txOutput.txOAddress = _txOAddress;
+
+        TXoutputs.push(txOutput);
+
+        return true;
+            
+    }
+
 
     function getTXoutputs() public view  returns (TXoutput[] memory){
+
         return TXoutputs;
     }
 
@@ -300,9 +291,6 @@ import {ECC} from "./ECC.sol";
         return _arr;
     }
 
-    function returnStruct(TestStruct memory _struct) public pure   returns (TestStruct memory){
-        return _struct;
-    }
 
     function returnMLSAG(MLSAG memory _mlsag) public pure   returns (MLSAG memory){
         return _mlsag;
@@ -310,15 +298,15 @@ import {ECC} from "./ECC.sol";
 
 
     event TransactionApproved (TXoutput _outputs);
-    event TestEvent(uint256 num);
+    
 
     
-    function point2String(uint256[2] memory _point) internal view returns (string memory){
+    function point2String(uint256[2] memory _point) internal pure returns (string memory){
         //has to be exactly like in wallet
         return string.concat(Strings.toString(_point[0]),Strings.toString(_point[1]));
     }
     
-    function hash2Hex(string memory _message) internal view returns (uint256){
+    function hash2Hex(string memory _message) internal pure returns (uint256){
         return uint256(keccak256(abi.encodePacked(_message)));
     }
 

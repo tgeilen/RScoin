@@ -22,6 +22,9 @@ class TxOutput:
 
     def getAmountCommitment(self)->Point:
         return self.amountCommitement
+    
+    def getAmmountCommitmentArray(self)->list:
+        return [self.amountCommitement.x, self.amountCommitement.y]
 
     def getRPubKey(self)->int:
         return self.rPubKey

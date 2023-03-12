@@ -33,9 +33,9 @@ class Accounts:
 
     wallets = []
 
-    w3 = 0
+   
 
-    def  __init__ (self, w3:web3, sc:SmartContract, limit:int = None):
+    def  __init__ (self, contract, sc:SmartContract, limit:int = None):
 
         #adjust number of accounts
         if(limit != None):
@@ -47,7 +47,7 @@ class Accounts:
         #create public key for each private key
         for viewKey, signKey in zip(self.privateViewKeys, self.privateSignKeys):
             #store public key in accounts array
-            wallet = Wallet(w3, viewKey, signKey, sc)
+            wallet = Wallet(contract, viewKey, signKey, sc)
             self.wallets.append(wallet)
             #print("viewKey: " + wallet.getViewKey())
             #print("signKey: " + wallet.getSignKey())
